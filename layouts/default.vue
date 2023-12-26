@@ -1,19 +1,38 @@
 <template>
   <v-app>
     <v-main>
-      <v-app-bar
-        app
-        color="white"
-        flat
+      <v-bottom-navigation
+        value="1"
+        color="primary"
+        class="d-flex justify-center align-center justify-lg-space-between"
       >
-        <v-container class="py-0">
+        <span>
           <img
-            class="mr-10"
+            class="ml-15"
             style="width: 40px;height: 40px;cursor: pointer"
             src="/LinkedIn_icon.svg"
           >
-        </v-container>
-      </v-app-bar>
+        </span>
+        <span>
+          <v-btn>
+            <span>Recents</span>
+
+            <v-icon>mdi-history</v-icon>
+          </v-btn>
+
+          <v-btn>
+            <span>Favorites</span>
+
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+
+          <v-btn>
+            <span>Nearby</span>
+
+            <v-icon>mdi-map-marker</v-icon>
+          </v-btn>
+        </span>
+      </v-bottom-navigation>
       <nuxt />
     </v-main>
   </v-app>
