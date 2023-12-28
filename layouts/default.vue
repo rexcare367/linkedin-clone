@@ -3,31 +3,45 @@
     <v-main>
       <v-bottom-navigation
         value="1"
-        color="primary"
-        class="d-flex justify-center align-center justify-lg-space-between"
+        class="d-flex justify-center align-center justify-space-between nav-bar elevation-0"
       >
-        <span>
-          <img
-            class="ml-15"
-            style="width: 40px;height: 40px;cursor: pointer"
+        <span class="d-flex">
+          <v-img
+            class="logo-margin-left mt-1"
+            style="width: 34px;height: 34px;cursor: pointer"
             src="/LinkedIn_icon.svg"
-          >
+          />
+          <span>
+            <v-text-field
+              prepend-inner-icon="mdi-magnify"
+              dense
+              height="34"
+              label="Arama yap"
+              background-color="#EEF3F8"
+              style="width: 280px;max-height:34px;border-radius: 4px;"
+              class="ml-2 custom-height"
+              solo
+              hide-details
+              flat
+            />
+          </span>
         </span>
+
         <span>
           <v-btn>
-            <span>Recents</span>
+            <span>Anasayfa</span>
 
-            <v-icon>mdi-history</v-icon>
+            <v-icon>mdi-home</v-icon>
           </v-btn>
 
           <v-btn>
-            <span>Favorites</span>
+            <span>Ağım</span>
 
             <v-icon>mdi-heart</v-icon>
           </v-btn>
 
           <v-btn>
-            <span>Nearby</span>
+            <span>İş İlanları</span>
 
             <v-icon>mdi-map-marker</v-icon>
           </v-btn>
@@ -47,3 +61,18 @@ export default {
   }
 }
 </script>
+<style>
+.nav-bar{
+  display: flex;
+  width: 1920px;
+  max-height: 53px;
+  padding: 0 203px;
+  justify-content: center;
+  align-items: center;
+  gap: 161px;
+  flex-shrink: 0;
+}
+.custom-height {
+  max-height: 34px !important;
+}
+</style>
