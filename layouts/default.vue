@@ -1,35 +1,33 @@
 <template>
-  <v-app>
+  <v-app style="background: #F3F2EF">
     <v-main>
       <v-app-bar
         app
         color="white"
         flat
+        min-height="52"
+        dense
       >
         <v-bottom-navigation
           value="1"
-          class="d-flex justify-center align-center justify-space-between nav-bar elevation-0"
+          class="nav-bar elevation-0 justify-space-between"
         >
           <span class="d-flex">
             <v-img
-              class="logo-margin-left mt-1"
+              class="mt-1"
               style="width: 34px;height: 34px;cursor: pointer"
               src="/LinkedIn_icon.svg"
             />
-            <span>
-              <v-text-field
-                prepend-inner-icon="mdi-magnify"
-                dense
-                height="34"
-                label="Arama yap"
-                background-color="#EEF3F8"
-                style="width: 280px;max-height:34px;border-radius: 4px;"
-                class="ml-2 custom-height"
-                solo
-                hide-details
-                flat
-              />
-            </span>
+            <v-text-field
+              prepend-inner-icon="mdi-magnify"
+              label="Arama yap"
+              background-color="#EEF3F8"
+              style="width: 280px; border-radius: 4px;"
+              class="ml-2"
+              solo
+              hide-details
+              flat
+            />
           </span>
 
           <span>
@@ -37,12 +35,16 @@
               v-model="tab"
               centered
               icons-and-text
-              height="45"
+              height="50"
               color="black"
             >
               <v-tabs-slider />
-
-              <v-tab v-for="(item,i) in tabs" :key="i" class="text-capitalize">
+              <v-tab
+                v-for="(item,i) in tabs"
+                :key="i"
+                class="text-capitalize bar-text"
+                :disabled="item.disableButton"
+              >
                 {{ item.text }}
                 <v-icon>{{ item.icon }}</v-icon>
               </v-tab>
@@ -64,41 +66,49 @@ export default {
       tabs: [
         {
           text: 'Ana Sayfa',
-          icon: 'mdi-home'
+          icon: 'mdi-home',
+          disableButton: false
         },
         {
           text: 'Ağım',
-          icon: 'mdi-account-supervisor'
+          icon: 'mdi-account-supervisor',
+          disableButton: true
         },
         {
           text: 'İş İlanları',
-          icon: 'mdi-briefcase'
+          icon: 'mdi-briefcase',
+          disableButton: true
         },
         {
           text: 'Mesajlaşma',
-          icon: 'mdi-chat-processing'
+          icon: 'mdi-chat-processing',
+          disableButton: true
         },
         {
           text: 'Bildirimler',
-          icon: 'mdi-bell'
+          icon: 'mdi-bell',
+          disableButton: true
         }
       ]
     }
   }
 }
 </script>
-<style>
+<style scoped>
+.v-text-field--solo::v-deep .v-input__control { min-height: 34px; }
 .nav-bar{
   display: flex;
-  width: 1920px;
-  max-height: 53px;
-  padding: 0 203px;
+  padding: 0 187px;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 161px;
   flex-shrink: 0;
 }
-.custom-height {
-  max-height: 34px !important;
+.bar-text {
+  font-family: sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 </style>
