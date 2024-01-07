@@ -21,6 +21,60 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
   ],
+  auth: {
+    store: true,
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'access',
+          global: true,
+          type: 'Bearer',
+          name: 'Authorization',
+          maxAge: 10800
+        },
+        refreshToken: {
+          property: 'refresh',
+          data: 'refresh',
+          maxAge: 86400
+        },
+        user: {
+          property: false
+        },
+        endpoints: {
+          login: {
+            url: '/api/accounts/login/',
+            method: 'post',
+            propertyName: 'access'
+          },
+          refresh: {
+            url: '/api/accounts/login/refresh/',
+            method: 'post',
+            propertyName: 'access'
+          },
+          user: {
+            url: '/api/accounts/get-data/',
+            method: 'get'
+          },
+          logout: false
+        }
+      }
+    },
+    redirect: {
+      login: false,
+      logout: false,
+      home: false
+    },
+    /* plugins: ['~/plugins/auth.js'], */
+    cookie: {
+      prefix: 'auth.',
+      options: {
+        path: '/',
+        secure: true,
+        maxAge: 1800
+      }
+    }
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -34,7 +88,8 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    ['@nuxtjs/dotenv', { systemvars: true }]
   ],
   ssr: false,
   server: {
@@ -43,20 +98,20 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseURL: process.env.DEFAULT_API_URL
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
