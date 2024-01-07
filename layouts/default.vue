@@ -12,7 +12,7 @@
           value="1"
           class="nav-bar elevation-0 justify-space-between"
         >
-          <span class="d-flex">
+          <span class="mt-1 d-flex">
             <v-img
               class="mt-1"
               style="width: 34px;height: 34px;cursor: pointer"
@@ -23,7 +23,7 @@
               label="Arama yap"
               background-color="#EEF3F8"
               style="width: 280px; border-radius: 4px;"
-              class="ml-2"
+              class="ml-2 mt-1"
               solo
               hide-details
               flat
@@ -63,6 +63,7 @@ export default {
     return {
       clipped: false,
       tab: null,
+      users: {},
       tabs: [
         {
           text: 'Ana Sayfa',
@@ -90,6 +91,17 @@ export default {
           disableButton: true
         }
       ]
+    }
+  },
+  mounted () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      this.$axios.$get()
+        .then((res) => {
+          this.users = res
+        })
     }
   }
 }
