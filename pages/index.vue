@@ -1,16 +1,13 @@
 <template>
   <v-container>
-    <button @click="logout">
-      Çıkış Yap
-    </button>
     <v-row>
       <v-col>
         <v-card
           min-height="270"
           max-width="225"
-          class="d-flex mt-4 ml-4 justify-start elevation-0"
+          class="mt-4 ml-4 justify-start elevation-0"
         >
-          <v-avatar class="profile-image">
+          <v-avatar class="profile-image" size="68">
             <v-img
               :src="usersData.profile_photo"
             />
@@ -19,6 +16,16 @@
             :src="usersData.banner_photo"
             class="background-image"
           />
+          <v-card-title class="mt-8 align-center justify-center" style="font-size: 16px">
+            {{ usersData.first_name }} {{ usersData.last_name }}
+          </v-card-title>
+
+          <v-card-subtitle class="text-center" style="font-size: 12px">
+            {{ usersData.biography }}
+          </v-card-subtitle>
+          <v-divider />
+          <v-card-text>Profilini görüntüleyenler</v-card-text>
+          <v-card-text>Bağlantılarınız</v-card-text>
         </v-card>
       </v-col>
 
@@ -91,9 +98,9 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px; /* veya istediğiniz genişlik */
-    height: auto;
+    transform: translate(-50%, -190%);
+    width: 200px;
+    height: 100px;
     display: block;
     border-radius: 50%;
     z-index: 1;
