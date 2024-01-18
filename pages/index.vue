@@ -9,19 +9,19 @@
         >
           <v-avatar class="profile-image" size="68">
             <v-img
-              :src="usersData.profile_photo"
+              :src="$store.state.usersData.profile_photo"
             />
           </v-avatar>
           <v-img
-            :src="usersData.banner_photo"
+            :src="$store.state.usersData.banner_photo"
             class="background-image"
           />
           <v-card-title class="mt-8 align-center justify-center" style="font-size: 16px">
-            {{ usersData.first_name }} {{ usersData.last_name }}
+            {{ $store.state.usersData.first_name }} {{ $store.state.usersData.last_name }}
           </v-card-title>
 
           <v-card-subtitle class="text-center" style="font-size: 12px">
-            {{ usersData.biography }}
+            {{ $store.state.usersData.biography }}
           </v-card-subtitle>
           <v-divider />
           <v-card-text style="font-size: 12px">
@@ -40,7 +40,7 @@
             <v-row>
               <v-avatar class="mt-3 ml-4" size="48">
                 <v-img
-                  :src="usersData.profile_photo"
+                  :src="$store.state.usersData.profile_photo"
                 />
               </v-avatar>
               <v-btn
@@ -112,7 +112,6 @@ export default {
   middleware: authControl,
   data () {
     return {
-      usersData: {},
       postItems: [
         {
           icon: 'mdi-image-outline',
@@ -132,16 +131,7 @@ export default {
       ]
     }
   },
-  mounted () {
-    this.getUserData()
-  },
   methods: {
-    getUserData () {
-      this.$auth.fetchUser()
-        .then((response) => {
-          this.usersData = response.data
-        })
-    },
     logout () {
       this.$auth.logout()
         .then(() => {
