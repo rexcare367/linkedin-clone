@@ -9,7 +9,6 @@
         dense
       >
         <v-bottom-navigation
-          value="1"
           class="nav-bar elevation-0 justify-space-between"
         >
           <span class="mt-1 d-flex">
@@ -33,10 +32,9 @@
           <span>
             <v-tabs
               v-model="tab"
-              centered
               icons-and-text
-              height="50"
               color="black"
+              height="52"
             >
               <v-tabs-slider />
               <v-tab
@@ -46,8 +44,22 @@
                 :disabled="item.disableButton"
               >
                 {{ item.text }}
-                <v-icon>{{ item.icon }}</v-icon>
+                <v-icon
+                  size="25"
+                  class="mt-1"
+                >
+                  {{ item.icon }}
+                </v-icon>
               </v-tab>
+              <v-btn>
+                Ben
+                <v-avatar
+                  class="mt-2"
+                  size="24"
+                >
+                  <v-img :src="$store.state.usersData.profile_photo" />
+                </v-avatar>
+              </v-btn>
             </v-tabs>
           </span>
         </v-bottom-navigation>
@@ -98,10 +110,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$axios.$get()
-        .then((res) => {
-          this.users = res
-        })
+      this.$store.dispatch('getData')
     }
   }
 }
@@ -117,7 +126,6 @@ export default {
   flex-shrink: 0;
 }
 .bar-text {
-  font-family: sans-serif;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;

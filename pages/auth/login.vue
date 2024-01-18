@@ -39,11 +39,8 @@ export default {
           .then(() => {
             this.$router.push('/')
           })
-
-        // Kullanıcı girişi başarılı ise yönlendirme vb. işlemleri burada yapabilirsiniz
-      } catch (error) {
+      } catch (error) { // çalıştıramadım kontrol edilecek burası
         if (error.response && error.response.status === 401) {
-          // Kullanıcı adı veya şifre yanlış olduğu durumda bir uyarı göster
           alert('Kullanıcı adı veya şifre yanlış.')
         } else {
           alert('Giriş işlemi sırasında bir hata oluştu.')
