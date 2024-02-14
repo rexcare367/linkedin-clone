@@ -1,27 +1,53 @@
 <template>
   <v-container>
+    <v-row justify="center">
+      <v-dialog
+        v-model="dialog"
+        max-width="600px"
+      >
+        <v-card max-height="593">
+          <v-textarea
+            v-model="postItem"
+            rows="8"
+            required
+            solo
+            no-resize
+            post-item
+          />
+          <v-card-actions>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="postCreate"
+            >
+              Gönder
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
     <v-row>
       <v-col>
         <v-card
           min-height="270"
           max-width="225"
-          class="mt-4 ml-4 justify-start elevation-0 card-border"
+          class="mt-4 justify-start elevation-0 card-border fill-width"
         >
           <v-avatar class="profile-image" size="68">
             <v-img
-              :src="$store.state.usersData.profile_photo"
+              :src="$store.state.auth.user.profile_photo"
             />
           </v-avatar>
           <v-img
-            :src="$store.state.usersData.banner_photo"
+            :src="$store.state.auth.user.banner_photo"
             class="background-image"
           />
           <v-card-title class="mt-8 align-center justify-center" style="font-size: 16px">
-            {{ $store.state.usersData.first_name }} {{ $store.state.usersData.last_name }}
+            {{ $store.state.auth.user.first_name }} {{ $store.state.auth.user.last_name }}
           </v-card-title>
 
           <v-card-subtitle class="text-center" style="font-size: 12px">
-            {{ $store.state.usersData.biography }}
+            {{ $store.state.auth.user.biography }}
           </v-card-subtitle>
           <v-divider />
           <v-card-text style="font-size: 12px">
@@ -40,7 +66,7 @@
             <v-row>
               <v-avatar class="mt-3 ml-4" size="48">
                 <v-img
-                  :src="$store.state.usersData.profile_photo"
+                  :src="$store.state.auth?.user.profile_photo"
                 />
               </v-avatar>
               <v-btn
@@ -50,6 +76,7 @@
                 height="48"
                 rounded
                 color="rgba(102, 102, 102, 0.60)"
+                @click="dialog = true"
               >
                 <v-card-subtitle
                   style="margin-left: -80%;font-weight: 400;color: Gray;text-transform: none"
@@ -86,16 +113,52 @@
         </v-card>
         <v-divider class="mb-2" />
         <v-card
-          class="fill-height elevation-0 card-border"
+          v-for="(item,i) in posts.results"
+          :key="i"
+          class="elevation-0 card-border mb-2"
         >
-          içerik kısmı
+          <div class="d-flex align-center">
+            <v-avatar class="mt-3 ml-4" size="48">
+              <v-img :src="item.user.profile_photo" />
+            </v-avatar>
+            <v-card-title style="font-size: 16px">
+              {{ item.user.first_name }} {{ item.user.last_name }}
+            </v-card-title>
+          </div>
+          <v-card-text style="color:black">
+            {{ item.text }}
+          </v-card-text>
+          <v-divider class="mb-2" />
+          <v-row>
+            <v-col
+              v-for="(bar,a) in likeBar"
+              :key="a"
+            >
+              <v-btn
+                text
+                class="ml-1 mb-2"
+              >
+                <v-icon
+                  :color="bar.color"
+                >
+                  {{ bar.icon }}
+                </v-icon>
+                <v-card-text
+                  style="color:rgba(102, 102, 102, 0.60)"
+                  class="text-capitalize pa-0 ml-1"
+                >
+                  {{ bar.text }}
+                </v-card-text>
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
 
       <v-col>
         <v-card
           min-height="268"
-          class="d-flex mt-4 mr-4 justify-start elevation-0 card-border"
+          class="mt-4 mr-4 justify-start elevation-0 card-border"
           width="300"
         >
           Footer kısmı
@@ -112,6 +175,32 @@ export default {
   middleware: authControl,
   data () {
     return {
+      dialog: false,
+      postItem: '',
+      posts: [],
+      media_file: null,
+      likeBar: [
+        {
+          icon: 'mdi-thumb-up-outline',
+          color: 'grey',
+          text: 'Beğen'
+        },
+        {
+          icon: 'mdi-message-text-outline',
+          color: 'grey',
+          text: 'Yorum Yap'
+        },
+        {
+          icon: 'mdi-sync',
+          color: 'grey',
+          text: 'Paylaş'
+        },
+        {
+          icon: 'mdi-send-variant',
+          color: 'grey',
+          text: 'Gönder'
+        }
+      ],
       postItems: [
         {
           icon: 'mdi-image-outline',
@@ -131,7 +220,26 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.postGet()
+  },
   methods: {
+    postGet () {
+      this.$axios.$get(process.env.POSTS_URL)
+        .then((response) => {
+          this.posts = response
+        })
+    },
+    postCreate () {
+      const params = {
+        text: this.postItem,
+        media_file: this.media_file
+      }
+      this.$axios.$post('/api/pages/post/', params)
+      this.postItem = ''
+      this.media_file = null
+      this.dialog = false
+    },
     logout () {
       this.$auth.logout()
         .then(() => {

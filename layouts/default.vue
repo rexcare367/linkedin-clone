@@ -57,7 +57,7 @@
                   class="mt-2"
                   size="24"
                 >
-                  <v-img :src="$store.state.usersData.profile_photo" />
+                  <v-img :src="$store.state.auth.user.profile_photo" />
                 </v-avatar>
               </v-btn>
             </v-tabs>
@@ -103,14 +103,6 @@ export default {
           disableButton: true
         }
       ]
-    }
-  },
-  mounted () {
-    this.getData()
-  },
-  methods: {
-    getData () {
-      this.$store.dispatch('getData')
     }
   }
 }
