@@ -86,6 +86,7 @@
                 </v-card-subtitle>
               </v-btn>
             </v-row>
+
             <v-row>
               <v-col
                 v-for="(item,i) in postItems"
@@ -111,9 +112,11 @@
             </v-row>
           </v-col>
         </v-card>
+
         <v-divider class="mb-2" />
+
         <v-card
-          v-for="(item,i) in posts.results"
+          v-for="(item,i) in posts"
           :key="i"
           class="elevation-0 card-border mb-2"
         >
@@ -128,30 +131,74 @@
           <v-card-text style="color:black">
             {{ item.text }}
           </v-card-text>
+
           <v-divider class="mb-2" />
-          <v-row>
-            <v-col
-              v-for="(bar,a) in likeBar"
-              :key="a"
+
+          <v-btn
+            text
+            class="ml-6 mb-2"
+            @click="postLike(item)"
+          >
+            <v-icon
+              :color="item.liked ? 'blue' : 'grey'"
             >
-              <v-btn
-                text
-                class="ml-1 mb-2"
-              >
-                <v-icon
-                  :color="bar.color"
-                >
-                  {{ bar.icon }}
-                </v-icon>
-                <v-card-text
-                  style="color:rgba(102, 102, 102, 0.60)"
-                  class="text-capitalize pa-0 ml-1"
-                >
-                  {{ bar.text }}
-                </v-card-text>
-              </v-btn>
-            </v-col>
-          </v-row>
+              mdi-thumb-up-outline
+            </v-icon>
+            <v-card-text
+              style="color:rgba(102, 102, 102, 0.60)"
+              class="text-capitalize pa-0 ml-1"
+            >
+              Beğen
+            </v-card-text>
+          </v-btn>
+          <v-btn
+            text
+            class="ml-6 mb-2"
+            @click="showComments(item)"
+          >
+            <v-icon
+              color="grey"
+            >
+              mdi-message-text-outline
+            </v-icon>
+            <v-card-text
+              style="color:rgba(102, 102, 102, 0.60)"
+              class="text-capitalize pa-0 ml-1"
+            >
+              Yorum Yap
+            </v-card-text>
+          </v-btn>
+          <v-btn
+            v-for="(bar,a) in likeBar"
+            :key="a"
+            text
+            class="ml-6 mb-2"
+          >
+            <v-icon
+              :color="bar.color"
+            >
+              {{ bar.icon }}
+            </v-icon>
+            <v-card-text
+              style="color:rgba(102, 102, 102, 0.60)"
+              class="text-capitalize pa-0 ml-1"
+            >
+              {{ bar.text }}
+            </v-card-text>
+          </v-btn>
+
+          <v-card v-if="item.commentVisible">
+            <v-text-field v-model="newComment" @keydown.enter="commentSend(item,newComment)" />
+            <v-btn @click="commentSend(item, $event.target.value)">
+              GÖNDER
+            </v-btn>
+          </v-card>
+
+          <v-card v-if="item.comments && item.comments.length > 0">
+            <v-card-title v-for="(comment, index) in item.comments" :key="index">
+              {{ comment.text }}
+            </v-card-title>
+          </v-card>
         </v-card>
       </v-col>
 
@@ -161,7 +208,7 @@
           class="mt-4 mr-4 justify-start elevation-0 card-border"
           width="300"
         >
-          Footer kısmı
+          footer kısmı
         </v-card>
       </v-col>
     </v-row>
@@ -178,18 +225,10 @@ export default {
       dialog: false,
       postItem: '',
       posts: [],
+      newComment: null,
       media_file: null,
+      commentVisible: false,
       likeBar: [
-        {
-          icon: 'mdi-thumb-up-outline',
-          color: 'grey',
-          text: 'Beğen'
-        },
-        {
-          icon: 'mdi-message-text-outline',
-          color: 'grey',
-          text: 'Yorum Yap'
-        },
         {
           icon: 'mdi-sync',
           color: 'grey',
@@ -227,7 +266,11 @@ export default {
     postGet () {
       this.$axios.$get(process.env.POSTS_URL)
         .then((response) => {
-          this.posts = response
+          this.posts = response.results.map(post => ({
+            ...post,
+            commentVisible: false,
+            comments: null
+          }))
         })
     },
     postCreate () {
@@ -240,10 +283,33 @@ export default {
       this.media_file = null
       this.dialog = false
     },
+    postLike (item) {
+      item.liked = !item.liked
+      this.$axios.post(process.env.POST_LIKE_URL.replace('{uuid}', item.uuid))
+    },
     logout () {
       this.$auth.logout()
         .then(() => {
           this.$router.push('/auth/login')
+        })
+    },
+    showComments (item) {
+      item.commentVisible = true
+      const params = {
+        post: item.uuid
+      }
+      this.$axios.$get(process.env.POST_COMMENT_URL, { params })
+        .then((response) => {
+          item.comments = response
+        })
+    },
+    commentSend (item, newComment) {
+      const params = {
+        text: newComment
+      }
+      this.$axios.$post('/api/pages/comment/', params)
+        .then((res) => {
+          console.log(res)
         })
     }
   }
