@@ -189,7 +189,7 @@
 
           <v-card v-if="item.commentVisible">
             <v-text-field v-model="newComment" @keydown.enter="commentSend(item,newComment)" />
-            <v-btn @click="commentSend(item, $event.target.value)">
+            <v-btn @click="commentSend(item, newComment)">
               GÖNDER
             </v-btn>
           </v-card>
@@ -285,7 +285,13 @@ export default {
     },
     postLike (item) {
       item.liked = !item.liked
-      this.$axios.post(process.env.POST_LIKE_URL.replace('{uuid}', item.uuid))
+
+      if (item.liked === true) {
+        this.$axios.post(process.env.POST_LIKE_URL.replace('{uuid}', item.uuid))
+        return item.liked
+      } else {
+        this.$axios.post(process.env.POST_UNLIKE_URL.replace('{uuid}', item.uuid))
+      }
     },
     logout () {
       this.$auth.logout()
@@ -305,11 +311,13 @@ export default {
     },
     commentSend (item, newComment) {
       const params = {
+        post: item.uuid,
         text: newComment
       }
       this.$axios.$post('/api/pages/comment/', params)
         .then((res) => {
-          console.log(res)
+          item.comments.push(res)
+          this.newComment = ''
         })
     }
   }
