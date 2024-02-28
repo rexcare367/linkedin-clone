@@ -16,6 +16,7 @@
               class="mt-1"
               style="width: 34px;height: 34px;cursor: pointer"
               src="/LinkedIn_icon.svg"
+              @click="redirectHome"
             />
             <v-text-field
               prepend-inner-icon="mdi-magnify"
@@ -32,26 +33,34 @@
           <span>
             <v-tabs
               v-model="tab"
+              hide-slider
               icons-and-text
               color="black"
               height="52"
             >
-              <v-tabs-slider />
+              <v-tab
+                class="text-capitalize bar-text "
+                @click="redirectHome"
+              >
+                <div class="d-flex flex-column">
+                  <v-icon size="25" class="ml-1 mt-2">mdi-home</v-icon>
+                  <span>Ana Sayfa</span>
+                </div>
+              </v-tab>
               <v-tab
                 v-for="(item,i) in tabs"
                 :key="i"
                 class="text-capitalize bar-text"
                 :disabled="item.disableButton"
               >
-                {{ item.text }}
-                <v-icon
-                  size="25"
-                  class="mt-1"
-                >
-                  {{ item.icon }}
-                </v-icon>
+                <div class="d-flex flex-column">
+                  <v-icon size="25" class="ml-1 mt-2">{{ item.icon }}</v-icon>
+                  <span>{{ item.text }}</span>
+                </div>
               </v-tab>
-              <v-btn>
+              <v-btn
+                @click="redirectProfile"
+              >
                 Ben
                 <v-avatar
                   class="mt-2"
@@ -78,11 +87,6 @@ export default {
       users: {},
       tabs: [
         {
-          text: 'Ana Sayfa',
-          icon: 'mdi-home',
-          disableButton: false
-        },
-        {
           text: 'Ağım',
           icon: 'mdi-account-supervisor',
           disableButton: true
@@ -104,6 +108,14 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    redirectHome () {
+      this.$router.push('/')
+    },
+    redirectProfile () {
+      this.$router.push('/profile')
+    }
   }
 }
 </script>
@@ -123,4 +135,5 @@ export default {
   font-weight: 400;
   line-height: normal;
 }
+
 </style>
