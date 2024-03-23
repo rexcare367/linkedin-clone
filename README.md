@@ -1,4 +1,4 @@
-# linkedIn-clone
+# LinkedIn Clone Project
 ![image](https://github.com/Nacnus/linkedIn-clone/assets/69769939/0947784f-f7d1-45e6-9426-b0a4e159a62c)
 ![image](https://github.com/Nacnus/linkedIn-clone/assets/69769939/74b29e77-c7ba-4d5d-8877-83f327b37ef0)
 ![image](https://github.com/Nacnus/linkedIn-clone/assets/69769939/bead4673-b8a0-4f70-a229-a4156ed30f4e)
